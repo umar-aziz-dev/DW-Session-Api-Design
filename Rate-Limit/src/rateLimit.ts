@@ -56,5 +56,6 @@ function createMiddleware(limiter: RateLimiterRedis, label: string) {
  * Export ready-to-use middlewares
  */
 export const fixedWindowLimiter = createMiddleware(fixedLimiter, "fixed window");
+
 export const slidingWindowLimiter = createMiddleware(slidingLimiter, "sliding window");
 export const tokenBucketLimiter = createMiddleware(tokenLimiter, "token bucket");

@@ -1,3 +1,18 @@
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         name:
+ *           type: string
+ *         price:
+ *           type: number
+ */
+
 import express from "express";
 
 const router = express.Router();
@@ -11,9 +26,27 @@ let products = [
   { id: 5, name: "Product 5", price: 50 },
   { id: 6, name: "Product 6", price: 60 },
 ];
-
+/**
+ * @openapi
+ * /products:
+ *   get:
+ *     summary: Get all products broo
+ *     tags:
+ *       - Products
+ *     responses:
+ *       200:
+ *         description: List of products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ *  
+ */
 // GET
-router.get("/", (req, res) => {
+router.get("/", (req, res) => { // /products
+
   res.status(200).json(products);
 });
 
@@ -66,6 +99,11 @@ router.delete("/:id", (req, res) => {
 // 1- Offset pagination
 router.get("/offset", (req, res) => {
   const offset = parseInt(req.query.offset) || 0;
+
+  // 0 , 10
+  // 10 , 10
+  // 20 , 10
+
   const limit = parseInt(req.query.limit) || 10;
 
   // SQL equivalent:
@@ -87,8 +125,13 @@ router.get("/page", (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
 
-  const offset = (page - 1) * limit;
+  // 0 , 10
+  // 1, 10
+  // 2, 10
 
+
+  const offset = (page - 1) * limit;
+//  offeset 10000
   // SQL equivalent:
   // SELECT * FROM products
   // ORDER BY id
@@ -108,7 +151,7 @@ router.get("/page", (req, res) => {
 router.get("/cursor", (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
   const cursor = parseInt(req.query.cursor) || 0;
-
+ 
   //   SQL Query Example for Cursor-based pagination
   //   SELECT * FROM products
   //   WHERE id > last_seen_id -- This is the cursor (last seen ID)
